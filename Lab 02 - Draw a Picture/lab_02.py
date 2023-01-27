@@ -31,6 +31,36 @@ arcade.draw_rectangle_filled(100, 285, 10, 37, arcade.csscolor.SADDLE_BROWN, 100
 arcade.draw_rectangle_filled(493, 250, 10, 44, arcade.csscolor.SADDLE_BROWN, 190)
 arcade.draw_rectangle_filled(510, 285, 10, 55, arcade.csscolor.SADDLE_BROWN, 85)
 
-# Botton
+# Buttons
 
+arcade.draw_circle_filled(300, 300, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(300, 330, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(300, 360, 5, arcade.color.ARSENIC)
+
+# Mouth
+
+arcade.draw_circle_filled(300, 419, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(282, 422, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(317, 422, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(330, 433, 5, arcade.color.ARSENIC)
+arcade.draw_circle_filled(270, 433, 5, arcade.color.ARSENIC)
+
+# Nose
+
+arcade.draw_triangle_filled(305, 450, 300, 470, 240, 460, arcade.color.ORANGE)
+
+# Eyes
+
+arcade.draw_arc_filled(275, 480, 20, 40, arcade.color.BLUEBERRY, 0, 180)
+arcade.draw_arc_filled(325, 480, 20, 40, arcade.color.BLUEBERRY, 0, 180)
+
+# Hat
+
+arcade.draw_polygon_filled(((300, 575),
+                            (285, 550),
+                            (315, 550),
+                            (310, 545),
+                            (280, 545)
+                            ),
+                            arcade.color.REDWOOD)
 arcade.run()
