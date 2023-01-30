@@ -98,5 +98,5 @@ arcade.draw_circle_filled(500, 356, 5, arcade.csscolor.WHITE)
 arcade.draw_text("Let it Snow!",
                   160, 150, arcade.color.BLUE, 40)
 
-
+arcade.finish_render()
 arcade.run()
