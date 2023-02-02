@@ -6,57 +6,61 @@ SCREEN_HEIGHT = 600
 
 
 def draw_ground():
-    arcade.draw_lrtb_rectangle_filled(0, 1000, 300, 0, arcade.csscolor.LIGHT_GREY)
+    arcade.draw_lrtb_rectangle_filled(0, SCREEN_WIDTH, SCREEN_HEIGHT / 2, 0, arcade.csscolor.LIGHT_GREY)
 
 def draw_snow_person(x,y):
+ # x - 300
+ # y - 38
+# Point
 
+    arcade.draw_point(x, y, arcade.color.BLUE, 5)
 # Body
 
-    arcade.draw_circle_filled(300 + x, 175 + y, 135, arcade.csscolor.WHITE_SMOKE)
-    arcade.draw_circle_filled(300 + x, 330 + y, 95, arcade.csscolor.MINT_CREAM)
-    arcade.draw_circle_filled(300 + x, 460 + y, 70, arcade.csscolor.WHITE)
+    arcade.draw_circle_filled(x, 137 + y, 135, arcade.csscolor.WHITE_SMOKE)
+    arcade.draw_circle_filled(x, 292 + y, 95, arcade.csscolor.MINT_CREAM)
+    arcade.draw_circle_filled(x, 422 + y, 70, arcade.csscolor.WHITE)
 
 # Arms
 
-    arcade.draw_rectangle_filled(150 + x, 310 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 50)
-    arcade.draw_rectangle_filled(450 + x, 310 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 130)
+    arcade.draw_rectangle_filled(x - 150, 272 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 50)
+    arcade.draw_rectangle_filled(x + 150, 272 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 130)
 
 # Hands
 
 # Left Hand
-    arcade.draw_rectangle_filled(113, 253, 10, 50, arcade.csscolor.SADDLE_BROWN, 180)
-    arcade.draw_rectangle_filled(100, 285, 10, 37, arcade.csscolor.SADDLE_BROWN, 100)
+    arcade.draw_rectangle_filled(x - 187, 215 + y, 10, 50, arcade.csscolor.SADDLE_BROWN, 180)
+    arcade.draw_rectangle_filled(x - 200, 247 + y, 10, 37, arcade.csscolor.SADDLE_BROWN, 100)
 # Right Hand
-    arcade.draw_rectangle_filled(493, 250, 10, 44, arcade.csscolor.SADDLE_BROWN, 190)
-    arcade.draw_rectangle_filled(510, 285, 10, 55, arcade.csscolor.SADDLE_BROWN, 85)
+    arcade.draw_rectangle_filled(x + 193, 212 + y, 10, 44, arcade.csscolor.SADDLE_BROWN, 190)
+    arcade.draw_rectangle_filled(x + 210, 247 + y, 10, 55, arcade.csscolor.SADDLE_BROWN, 85)
 
 # Buttons
 
-    arcade.draw_circle_filled(300, 300, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(300, 330, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(300, 360, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x, 262 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x, 292 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x, 322 + y, 5, arcade.color.ARSENIC)
 
 # Mouth
 
-    arcade.draw_circle_filled(300, 419, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(282, 422, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(317, 422, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(330, 433, 5, arcade.color.ARSENIC)
-    arcade.draw_circle_filled(270, 433, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x, 381 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x - 18, 384 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x + 18, 384 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x + 30, 395 + y, 5, arcade.color.ARSENIC)
+    arcade.draw_circle_filled(x - 30, 395 + y, 5, arcade.color.ARSENIC)
 
 # Nose
 
-    arcade.draw_triangle_filled(305, 450, 300, 470, 240, 460, arcade.color.ORANGE)
+    arcade.draw_triangle_filled(x + 5, 412 + y, x, 432 + y, x - 60, 422 + y, arcade.color.ORANGE)
 
 # Eyes
 
-    arcade.draw_arc_filled(275, 480, 20, 40, arcade.color.BLUEBERRY, 0, 180)
-    arcade.draw_arc_filled(325, 480, 20, 40, arcade.color.BLUEBERRY, 0, 180)
+    arcade.draw_arc_filled(x - 25, 442 + y, 20, 40, arcade.color.BLUEBERRY, 0, 180)
+    arcade.draw_arc_filled(x + 25, 442 + y, 20, 40, arcade.color.BLUEBERRY, 0, 180)
 
 # Hat
 
-    arcade.draw_polygon_filled(((335, 585), (280, 570), (250, 510), (350, 510), (320, 550)), arcade.csscolor.RED)
-    arcade.draw_circle_filled(335, 585, 10, arcade.csscolor.ANTIQUE_WHITE)
+    arcade.draw_polygon_filled(((x + 35, 547 + y), (x - 20, 532 + y), (x - 50, 472 + y), (x + 50, 472 + y), (x + 20, 512 + y)), arcade.csscolor.RED)
+    arcade.draw_circle_filled(x + 35, 547 + y, 10, arcade.csscolor.ANTIQUE_WHITE)
 
 def draw_snow_fall():
 
@@ -97,8 +101,10 @@ def main():
     arcade.start_render()
 
     draw_ground()
-    draw_snow_person()
     draw_snow_fall()
+    draw_snow_person(100, 50)
+    draw_snow_person(400, 40)
+    draw_snow_person(600, 60)
     let_it_snow_text()
 
     arcade.finish_render()
