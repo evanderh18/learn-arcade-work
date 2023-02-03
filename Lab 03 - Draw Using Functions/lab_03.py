@@ -8,25 +8,22 @@ SCREEN_HEIGHT = 600
 def draw_ground():
     arcade.draw_lrtb_rectangle_filled(0, SCREEN_WIDTH, SCREEN_HEIGHT / 2, 0, arcade.csscolor.LIGHT_GREY)
 
+
 def draw_snow_person(x, y):
 
     # Point
-
     arcade.draw_point(x, y, arcade.color.BLUE, 5)
 
     # Body
-
     arcade.draw_circle_filled(x, 137 + y, 135, arcade.csscolor.WHITE_SMOKE)
     arcade.draw_circle_filled(x, 292 + y, 95, arcade.csscolor.MINT_CREAM)
     arcade.draw_circle_filled(x, 422 + y, 70, arcade.csscolor.WHITE)
 
     # Arms
-
     arcade.draw_rectangle_filled(x - 150, 272 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 50)
     arcade.draw_rectangle_filled(x + 150, 272 + y, 10, 185, arcade.csscolor.SADDLE_BROWN, 130)
 
     # Hands
-
     # Left Hand
     arcade.draw_rectangle_filled(x - 187, 215 + y, 10, 50, arcade.csscolor.SADDLE_BROWN, 180)
     arcade.draw_rectangle_filled(x - 200, 247 + y, 10, 37, arcade.csscolor.SADDLE_BROWN, 100)
@@ -59,10 +56,12 @@ def draw_snow_person(x, y):
 
     # Hat
 
-    arcade.draw_polygon_filled(((x + 35, 547 + y), (x - 20, 532 + y), (x - 50, 472 + y), (x + 50, 472 + y), (x + 20, 512 + y)), arcade.csscolor.RED)
+    arcade.draw_polygon_filled(((x + 35, 547 + y), (x - 20, 532 + y)
+                                , (x - 50, 472 + y), (x + 50, 472 + y), (x + 20, 512 + y)), arcade.csscolor.RED)
     arcade.draw_circle_filled(x + 35, 547 + y, 10, arcade.csscolor.ANTIQUE_WHITE)
 
-def draw_snow_fall(x,y):
+
+def draw_snow_fall(x, y):
 
     arcade.draw_point(x, y, arcade.color.WHITE, 5)
     # Snow Fall
@@ -86,8 +85,6 @@ def let_it_snow_text(x, y):
     arcade.draw_text("Let it Snow!", x - 8, y - 5, arcade.color.BLUE, 45)
 
 
-
-
 def on_draw(delta_time):
     arcade.start_render()
 
@@ -102,7 +99,6 @@ def on_draw(delta_time):
 
     on_draw.let_it_snow1_x += 1
 
-on_draw.let_it_snow1_x = 100
 
 def main():
     arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, "snow_person")
@@ -110,6 +106,6 @@ def main():
     arcade.schedule(on_draw, (1/60))
     arcade.run()
 
+
+on_draw.let_it_snow1_x = 100
 main()
-
-
