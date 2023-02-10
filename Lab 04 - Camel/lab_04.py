@@ -105,7 +105,7 @@ def main():
             if drinks_in_canteen != 0:
                 drinks_in_canteen -= 1
                 thirst = 0
-                print("You have", drinks_in_canteen, "drinks left!")
+                print("You have", drinks_in_canteen, "drinks left!\n")
             else:
                 print("You have no water to drink!\n")
 
