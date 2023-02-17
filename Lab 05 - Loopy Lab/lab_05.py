@@ -42,28 +42,72 @@ def draw_section_2():
 def draw_section_3():
     # Use the modulus operator and an if/else statement to select the color.
     # Don't use multiple 'if' statements.
+    for row in range(30):
+        for column in range(30):
+            x = column*10 +605
+            y = row*10 +5
+            if row % 2 == 0:
+                cur_color = arcade.color.WHITE
+            else:
+                cur_color = arcade.color.BLACK
+            arcade.draw_rectangle_filled(x, y, 5, 5, cur_color)
     pass
 
 
 def draw_section_4():
     # Use the modulus operator and just one 'if' statement to select the color.
+    for row in range(30):
+        for column in range(30):
+            x = column*10 +905
+            y = row*10 +5
+            if column % 2 == 0 and row % 2 == 0:
+                cur_color = arcade.color.WHITE
+            else:
+                cur_color = arcade.color.BLACK
+            arcade.draw_rectangle_filled(x, y, 5, 5, cur_color)
     pass
 
 
 def draw_section_5():
     # Do NOT use 'if' statements to complete 5-8. Manipulate the loops instead.
+    for column in range(30):
+        for row in range(30):
+            if column > row:
+                x = column * 10 + 5
+                y = row * 10 + 305
+                arcade.draw_rectangle_filled(x, y, 5, 5, arcade.color.WHITE)
     pass
 
 
 def draw_section_6():
+    for column in range(30):
+        for row in range(30):
+            if row < 30 - column:
+                x = column * 10 + 305
+                y = row * 10 + 305
+                arcade.draw_rectangle_filled(x, y, 5, 5, arcade.color.WHITE)
     pass
 
 
+
 def draw_section_7():
+    for column in range(30):
+        for row in range(30):
+            if row >= column:
+                x = column * 10 + 605
+                y = row * 10 + 305
+                arcade.draw_rectangle_filled(x, y, 5, 5, arcade.color.WHITE)
     pass
 
 
 def draw_section_8():
+
+    for column in range(30):
+        for row in range(30):
+            if column >= 29 - row:
+                x = column * 10 + 905
+                y = row * 10 + 305
+                arcade.draw_rectangle_filled(x, y, 5, 5, arcade.color.WHITE)
     pass
 
 
