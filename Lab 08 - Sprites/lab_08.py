@@ -2,14 +2,43 @@ import arcade
 import random
 
 # --- Constants ---
-SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_COIN = .25
-COIN_COUNT = 1000
+SPRITE_SCALING_PLAYER = 0.75
+SPRITE_SCALING_STAR = .25
+SPRITE_ROCK_SCALING = .35
+STAR_COUNT = 100
+ROCK_RANGE = 100
 
 SCREEN_WIDTH = 950
 SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Sprite Collect Coins Example"
 
+class Star(arcade.Sprite):
+
+    def __init__(self, filename, sprite_scaling):
+
+        super().__init__(filename, sprite_scaling)
+
+        self.change_x = 0
+        self.change_y = 0
+
+    def update(self):
+
+        # Move the coin
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        # If we are out-of-bounds, then 'bounce'
+        if self.left < 0:
+            self.change_x *= -1
+
+        if self.right > SCREEN_WIDTH:
+            self.change_x *= -1
+
+        if self.bottom < 0:
+            self.change_y *= -1
+
+        if self.top > SCREEN_HEIGHT:
+            self.change_y *= -1
 
 class MyGame(arcade.Window):
 
@@ -20,12 +49,12 @@ class MyGame(arcade.Window):
 
         # Variables that will hold sprite lists
         self.player_list = None
-        self.coin_list = None
+        self.star_list = None
         self.rock_list = None
 
         # Set up the player info
         self.player_sprite = None
-        self.score = 100
+        self.score = 0
 
         # Don't show the mouse cursor
         self.set_mouse_visible(False)
@@ -37,7 +66,7 @@ class MyGame(arcade.Window):
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.star_list = arcade.SpriteList()
         self.rock_list = arcade.SpriteList()
 
         # Score
@@ -51,33 +80,56 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
-        # Create the coins
-        for i in range(COIN_COUNT):
+        # Create the stars
+        for i in range(STAR_COUNT):
+
+            # Create the star instance
+            # Coin image from kenney.nl
+            star = Star(":resources:images/items/star.png",
+                                 SPRITE_SCALING_STAR)
+
+            # Position the coin
+            star.center_x = random.randrange(SCREEN_WIDTH)
+            star.center_y = random.randrange(SCREEN_HEIGHT)
+            star.change_x = random.randrange(-3, 4)
+            star.change_y = random.randrange(-3, 4)
+
+            # Add the coin to the lists
+            self.star_list.append(star)
+
+        for i in range(ROCK_RANGE):
 
             # Create the coin instance
             # Coin image from kenney.nl
-            coin = arcade.Sprite(":resources:images/items/star.png",
-                                 SPRITE_SCALING_COIN)
+            rock = arcade.Sprite(":resources:images/space_shooter/meteorGrey_med1.png",
+                                 SPRITE_ROCK_SCALING)
 
             # Position the coin
-            coin.center_x = random.randrange(SCREEN_WIDTH)
-            coin.center_y = random.randrange(SCREEN_HEIGHT)
+            rock.center_x = random.randrange(SCREEN_WIDTH)
+            rock.center_y = random.randrange(SCREEN_HEIGHT)
 
             # Add the coin to the lists
-            self.coin_list.append(coin)
+            self.rock_list.append(rock)
 
+        rock = arcade.Sprite(":resources:images/space_shooter/meteorGrey_med1.png",
+                             SPRITE_ROCK_SCALING)
+
+        # Position the coin
+        rock.center_x = random.randrange(SCREEN_WIDTH)
+        rock.center_y = random.randrange(SCREEN_HEIGHT)
 
 
     def on_draw(self):
         """ Draw everything """
         self.clear()
-        self.coin_list.draw()
+        self.star_list.draw()
+        self.rock_list.draw()
         self.player_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(text=output, start_x=10, start_y=20,
-                         color=arcade.color.BLUE, font_size=14)
+        arcade.draw_text(text=output, start_x = 10, start_y = 20,
+                         color = arcade.color.BLUE, font_size = 20)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
@@ -89,18 +141,27 @@ class MyGame(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
 
+        self.rock_list.update()
+        self.star_list.update()
+
         # Generate a list of all sprites that collided with the player.
-        coins_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                              self.coin_list)
+        star_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                              self.star_list)
+        rock_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                             self.rock_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
-        for coin in coins_hit_list:
-            coin.remove_from_sprite_lists()
+        for star in star_hit_list:
+            star.remove_from_sprite_lists()
             self.score += 1
 
         for rock in rock_hit_list:
-            rock.remove_from_
+            rock.remove_from_sprite_lists()
+            self.score -= 1
 
+        if self.score <= -1:
+            game_over = "Game Over"
+            arcade.draw_text(text=game_over, start_x=30, start_y=300, color=arcade.color.RED, font_size=20)
 
 def main():
     """ Main function """
@@ -111,3 +172,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    #if len
