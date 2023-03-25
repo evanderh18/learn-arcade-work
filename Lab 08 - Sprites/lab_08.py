@@ -1,7 +1,5 @@
 import arcade
 import random
-import arcade
-import random
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.75
