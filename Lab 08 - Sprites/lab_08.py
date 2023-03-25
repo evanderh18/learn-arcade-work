@@ -1,48 +1,53 @@
 import arcade
 import random
+import math
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.75
 SPRITE_SCALING_STAR = .25
 SPRITE_ROCK_SCALING = .35
-STAR_COUNT = 5
-ROCK_RANGE = 5
+STAR_COUNT = 60
+ROCK_RANGE = 40
 
 SCREEN_WIDTH = 1150
 SCREEN_HEIGHT = 700
 SCREEN_TITLE = "Space Star Collector"
 
-#Star Border Class
-class Star(arcade.Sprite):
+#Rock Border Class
+class Rock(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
-
+        """ Constructor. """
+        # Call the parent class (Sprite) constructor
         super().__init__(filename, sprite_scaling)
 
-        self.change_x = 0
-        self.change_y = 0
+        # Current angle in radians
+        self.circle_angle = 0
+
+        # How far away from the center to orbit, in pixels
+        self.circle_radius = random.randint(0,300)
+
+        # How fast to orbit, in radians per frame
+        self.circle_speed = random.randint(1,100)/8000
+
+        # Set the center of the point we will orbit around
+        self.circle_center_x = random.randint(0,SCREEN_WIDTH)
+        self.circle_center_y = random.randint(0,SCREEN_HEIGHT)
 
     def update(self):
 
-        # Move the coin
-        self.center_x += self.change_x
-        self.center_y += self.change_y
+        # Calculate a new x, y
+        self.center_x = self.circle_radius * math.sin(self.circle_angle) \
+                        + self.circle_center_x
+        self.center_y = self.circle_radius * math.cos(self.circle_angle) \
+                        + self.circle_center_y
 
-        # If we are out-of-bounds, then 'bounce'
-        if self.left < 0:
-            self.change_x *= -1
+        # Increase the angle in prep for the next round.
+        self.circle_angle += self.circle_speed
 
-        if self.right > SCREEN_WIDTH:
-            self.change_x *= -1
 
-        if self.bottom < 0:
-            self.change_y *= -1
-
-        if self.top > SCREEN_HEIGHT:
-            self.change_y *= -1
-
-#Rock Border Class
-class Rock(arcade.Sprite):
+#Star Border Class
+class Star(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
 
@@ -177,15 +182,10 @@ class MyGame(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
 
-        # if self.gameOver:
-        #     arcade.pause(5)
-        #     arcade.close_window()
-
         # Extract Sound
-        star_sound = arcade.load_sound("star.wav")
-        rock_sound = arcade.load_sound("rock.wav")
-
         if len(self.star_list) > 0:
+            star_sound = arcade.load_sound("star.wav")
+            rock_sound = arcade.load_sound("rock.wav")
             self.rock_list.update()
             self.star_list.update()
 
@@ -195,17 +195,17 @@ class MyGame(arcade.Window):
             rock_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                                  self.rock_list)
 
-            # Loop through each colliding sprite, remove it, and add to the score.
+            # Hit Star.
             for star in star_hit_list:
                 star.remove_from_sprite_lists()
                 self.score += 1
                 arcade.play_sound(star_sound)
-
+            # Hit Rock
             for rock in rock_hit_list:
                 rock.remove_from_sprite_lists()
                 self.score -= 1
                 arcade.play_sound(rock_sound)
-
+            # Game Over
             if len(self.star_list) == 0:
                 self.gameOver = True
 
