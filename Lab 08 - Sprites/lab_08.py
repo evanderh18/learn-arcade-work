@@ -5,8 +5,8 @@ import random
 SPRITE_SCALING_PLAYER = 0.75
 SPRITE_SCALING_STAR = .25
 SPRITE_ROCK_SCALING = .35
-STAR_COUNT = 60
-ROCK_RANGE = 60
+STAR_COUNT = 5
+ROCK_RANGE = 5
 
 SCREEN_WIDTH = 1150
 SCREEN_HEIGHT = 700
@@ -53,7 +53,7 @@ class Rock(arcade.Sprite):
 
     def update(self):
 
-        # Move the coin
+        # Move the rock
         self.center_x += self.change_x
         self.center_y += self.change_y
 
@@ -81,6 +81,7 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.star_list = None
         self.rock_list = None
+        self.gameOver = False
 
         # Set up the player info
         self.player_sprite = None
@@ -150,7 +151,6 @@ class MyGame(arcade.Window):
         rock.center_x = random.randrange(SCREEN_WIDTH)
         rock.center_y = random.randrange(SCREEN_HEIGHT)
 
-
     def on_draw(self):
         """ Draw everything """
         self.clear()
@@ -162,43 +162,52 @@ class MyGame(arcade.Window):
         output = f"Score: {self.score}"
         arcade.draw_text(text=output, start_x=10, start_y=20,
                          color=arcade.color.BLUE, font_size=30)
+        if self.gameOver:
+            arcade.draw_text(text="Game Over", start_x=300, start_y=350,
+                             color=arcade.color.RED, font_size=75)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
 
-        # Move the center of the player sprite to match the mouse x, y
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        if not self.gameOver:
+            # Move the center of the player sprite to match the mouse x, y
+            self.player_sprite.center_x = x
+            self.player_sprite.center_y = y
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+
+        # if self.gameOver:
+        #     arcade.pause(5)
+        #     arcade.close_window()
+
         # Extract Sound
         star_sound = arcade.load_sound("star.wav")
         rock_sound = arcade.load_sound("rock.wav")
 
-        self.rock_list.update()
-        self.star_list.update()
+        if len(self.star_list) > 0:
+            self.rock_list.update()
+            self.star_list.update()
 
-        # Generate a list of all sprites that collided with the player.
-        star_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                              self.star_list)
-        rock_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                             self.rock_list)
+            # Generate a list of all sprites that collided with the player.
+            star_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                                 self.star_list)
+            rock_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                                 self.rock_list)
 
-        # Loop through each colliding sprite, remove it, and add to the score.
-        for star in star_hit_list:
-            star.remove_from_sprite_lists()
-            self.score += 1
-            arcade.play_sound(star_sound)
+            # Loop through each colliding sprite, remove it, and add to the score.
+            for star in star_hit_list:
+                star.remove_from_sprite_lists()
+                self.score += 1
+                arcade.play_sound(star_sound)
 
-        for rock in rock_hit_list:
-            rock.remove_from_sprite_lists()
-            self.score -= 1
-            arcade.play_sound(rock_sound)
+            for rock in rock_hit_list:
+                rock.remove_from_sprite_lists()
+                self.score -= 1
+                arcade.play_sound(rock_sound)
 
-        if len(self.star_list) == 0:
-            arcade.draw_text(text="Game Over", start_x=100, start_y=100,
-                             color=arcade.color.BLUE, font_size=20)
+            if len(self.star_list) == 0:
+                self.gameOver = True
 
 def main():
     """ Main function """
