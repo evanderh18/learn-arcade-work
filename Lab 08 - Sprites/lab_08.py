@@ -1,18 +1,50 @@
 import arcade
 import random
+import arcade
+import random
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.75
 SPRITE_SCALING_STAR = .25
 SPRITE_ROCK_SCALING = .35
-STAR_COUNT = 100
-ROCK_RANGE = 100
+STAR_COUNT = 60
+ROCK_RANGE = 60
 
-SCREEN_WIDTH = 950
-SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Sprite Collect Coins Example"
+SCREEN_WIDTH = 1150
+SCREEN_HEIGHT = 700
+SCREEN_TITLE = "Space Star Collector"
 
+#Star Border Class
 class Star(arcade.Sprite):
+
+    def __init__(self, filename, sprite_scaling):
+
+        super().__init__(filename, sprite_scaling)
+
+        self.change_x = 0
+        self.change_y = 0
+
+    def update(self):
+
+        # Move the coin
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        # If we are out-of-bounds, then 'bounce'
+        if self.left < 0:
+            self.change_x *= -1
+
+        if self.right > SCREEN_WIDTH:
+            self.change_x *= -1
+
+        if self.bottom < 0:
+            self.change_y *= -1
+
+        if self.top > SCREEN_HEIGHT:
+            self.change_y *= -1
+
+#Rock Border Class
+class Rock(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
 
@@ -84,37 +116,39 @@ class MyGame(arcade.Window):
         for i in range(STAR_COUNT):
 
             # Create the star instance
-            # Coin image from kenney.nl
+            # Star image from kenney.nl
             star = Star(":resources:images/items/star.png",
                                  SPRITE_SCALING_STAR)
 
-            # Position the coin
+            # Position the star
             star.center_x = random.randrange(SCREEN_WIDTH)
             star.center_y = random.randrange(SCREEN_HEIGHT)
             star.change_x = random.randrange(-3, 4)
             star.change_y = random.randrange(-3, 4)
 
-            # Add the coin to the lists
+            # Add the star to the lists
             self.star_list.append(star)
 
         for i in range(ROCK_RANGE):
 
-            # Create the coin instance
-            # Coin image from kenney.nl
-            rock = arcade.Sprite(":resources:images/space_shooter/meteorGrey_med1.png",
+            # Create the rock instance
+            # Rock image from kenney.nl
+            rock = Rock(":resources:images/space_shooter/meteorGrey_med1.png",
                                  SPRITE_ROCK_SCALING)
 
-            # Position the coin
+            # Position the Rock
             rock.center_x = random.randrange(SCREEN_WIDTH)
             rock.center_y = random.randrange(SCREEN_HEIGHT)
+            rock.change_x = random.randrange(-3, 4)
+            rock.change_y = random.randrange(-3, 4)
 
-            # Add the coin to the lists
+            # Add the Rock to the lists
             self.rock_list.append(rock)
 
         rock = arcade.Sprite(":resources:images/space_shooter/meteorGrey_med1.png",
                              SPRITE_ROCK_SCALING)
 
-        # Position the coin
+        # Position the Rock
         rock.center_x = random.randrange(SCREEN_WIDTH)
         rock.center_y = random.randrange(SCREEN_HEIGHT)
 
@@ -128,8 +162,8 @@ class MyGame(arcade.Window):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(text=output, start_x = 10, start_y = 20,
-                         color = arcade.color.BLUE, font_size = 20)
+        arcade.draw_text(text=output, start_x=10, start_y=20,
+                         color=arcade.color.BLUE, font_size=30)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
@@ -140,6 +174,9 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+        # Extract Sound
+        star_sound = arcade.load_sound("star.wav")
+        rock_sound = arcade.load_sound("rock.wav")
 
         self.rock_list.update()
         self.star_list.update()
@@ -154,14 +191,16 @@ class MyGame(arcade.Window):
         for star in star_hit_list:
             star.remove_from_sprite_lists()
             self.score += 1
+            arcade.play_sound(star_sound)
 
         for rock in rock_hit_list:
             rock.remove_from_sprite_lists()
             self.score -= 1
+            arcade.play_sound(rock_sound)
 
-        if self.score <= -1:
-            game_over = "Game Over"
-            arcade.draw_text(text=game_over, start_x=30, start_y=300, color=arcade.color.RED, font_size=20)
+        if len(self.star_list) == 0:
+            arcade.draw_text(text="Game Over", start_x=100, start_y=100,
+                             color=arcade.color.BLUE, font_size=20)
 
 def main():
     """ Main function """
