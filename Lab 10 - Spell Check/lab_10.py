@@ -24,7 +24,7 @@ with open("AliceInWonderLand200.txt", "r") as file:
     for line in file:
         line_number += 1
         word_list = split_line(line)
-        # Spell check
+        # Spell check, Find wrong words
         for word in word_list:
             if word.upper() not in dictionary_list:
                 print(f"Line {line_number} has a possible misspelled word. Word is: {word}")
