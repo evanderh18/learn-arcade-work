@@ -63,12 +63,29 @@ def main():
             next_room = room_list[current_room].south
         elif command_words[0].upper() == "W" or command_words[0].upper() == "WEST":
             next_room = room_list[current_room].west
+        elif command_words[0].upper() == "GET":
+            found_item = False
+            for f in item_list:
+                if f.name.upper() == command_words[1].upper():
+                    found_item = True
+                    f.room_num = -1
+                    break
+            if found_item == False:
+                print("Error item is not found or does not exist")
+        elif command_words[0].upper() == "INVENTORY":
+            for f in item_list:
+                if f.room_num == -1:
+                    print(f.name)
+        elif command_words[0].upper() == "USE":
+            for f in item_list:
+                if f.name.upper() == command_words[1].upper():
+                    f.room_num = random.randint(0, 7)
         elif command_words[0].upper() == "Q" or command_words[0].upper() == "QUIT":
             done = True
             print("\nYou left the house\nGame Over")
             continue
         else:
-            print("Unknown direction")
+            print("Unknown Command")
             next_room = None
             continue
 
