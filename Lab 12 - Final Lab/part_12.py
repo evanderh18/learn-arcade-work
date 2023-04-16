@@ -1,30 +1,18 @@
 import random
+from room import Room
+from item import Item
+from ghost import Ghost
+
 import math
 ROOM_MIN = 1
 ROOM_MAX = 7
 
-
-class Room:
-    def __init__(self, description: str = "", north: int = 0, east: int = 0, south: int = 0, west: int = 0):
-        self.description: str = description
-        self.north: int = north
-        self.east: int = east
-        self.south: int = south
-        self.west: int = west
-
-class Item:
-    def __init__(self, description: str = "", room_num: int = 0, name: str = ""):
-        self.description: str = description
-        self.room_num: int = room_num
-        self.name: str = name
-
-class Ghost:
-    def __init__(self, room_num: int = 1):
-        self.room_num: int = room_num
-
 def move_ghosts(ghost_list):
     for f in ghost_list:
-        f.room_num = random.randint(ROOM_MIN, ROOM_MAX)
+        next_room_num = random.randint(ROOM_MIN, ROOM_MAX)
+        while next_room_num == f.room_num:
+            next_room_num = random.randint(ROOM_MIN, ROOM_MAX)
+        f.room_num = next_room_num
 
 def main():
     room_list = []
