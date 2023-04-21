@@ -13,6 +13,13 @@ def move_ghosts(ghost_list):
         while next_room_num == f.room_num:
             next_room_num = random.randint(ROOM_MIN, ROOM_MAX)
         f.room_num = next_room_num
+#Override to make sure ghost does not appear in the same room again when using sage
+def move_ghosts_sage(ghost_list, current_room):
+    for f in ghost_list:
+        next_room_num = random.randint(ROOM_MIN, ROOM_MAX)
+        while next_room_num == f.room_num or next_room_num == current_room:
+            next_room_num = random.randint(ROOM_MIN, ROOM_MAX)
+        f.room_num = next_room_num
 
 def main():
     room_list = []
@@ -28,7 +35,6 @@ def main():
           "inventory type command \"INVENTORY\"***\n***To quit game type command \"QUIT\"***\n---PRESS ENTER KEY TO "
           "CONTINUE---")
 #Spawn Ghost
-    ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
     ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
     ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
     ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
@@ -134,7 +140,7 @@ def main():
                     elif command_words[1].upper() == "SAGE":
                         if caught_by_ghost == True:
                             caught_by_ghost = False
-                            move_ghosts(ghost_list)
+                            move_ghosts_sage(ghost_list, current_room)
                             print("The ghost fled!")
                     f.room_num = random.randint(ROOM_MIN, ROOM_MAX)
             if found_item == False:
