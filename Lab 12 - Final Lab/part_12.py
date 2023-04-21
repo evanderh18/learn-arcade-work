@@ -4,8 +4,8 @@ from item import Item
 from ghost import Ghost
 
 import math
-ROOM_MIN = 1
-ROOM_MAX = 7
+ROOM_MIN = 2
+ROOM_MAX = 9
 
 def move_ghosts(ghost_list):
     for f in ghost_list:
@@ -22,46 +22,66 @@ def main():
     lives = 3
     potion_countdown = 0
 
+#Intro Screen
     input("---Welcome to the Haunted Mansion---\nYour objective is to find your way out hahaha!\nFind a key to open "
-          "up the door to the main exit\n---PRESS ENTER KEY TO CONTINUE---")
-
+          "up the door to the main exit\n***In order to move around rooms, command your desired direction***\n***To view "
+          "inventory type command \"INVENTORY\"***\n***To quit game type command \"QUIT\"***\n---PRESS ENTER KEY TO "
+          "CONTINUE---")
+#Spawn Ghost
     ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
-
+    ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
+    ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
+    ghost_list.append(Ghost(random.randint(ROOM_MIN, ROOM_MAX)))
+#Spawn Items
     item_list.append(Item("There is a invisibility potion here\nPick up using command GET POTION", random.randint(ROOM_MIN, ROOM_MAX), "Potion"))
     item_list.append(Item("A Key that gives you access to leave the mansion!\nPick up using command GET KEY", random.randint(ROOM_MIN, ROOM_MAX), "Key"))
     item_list.append(Item("You found sage\nPick up using command GET SAGE", random.randint(ROOM_MIN, ROOM_MAX), "Sage"))
-
+#Rooms
     room = Room("You are in a bedroom that has two small beds.\nThere is a door to your North and East.", 3, 1, None,
                 None)
     room_list.append(room)
-    room = Room("You are in the South Hall which has old furniture.\nEscape using command USE KEY\nThere is a door to your North, East, and West.", 4,
+
+    room = Room("You are in the South Hall which has old furniture.\nThere is the main door! Escape using command \"USE KEY\" if found.\nThere is a door to your North, East, and West.", 4,
                 2, None, 0)
     room_list.append(room)
-    room = Room("You are in the Dining Room, the table seems to be set for six.\nThere is a door to your North and "
+
+    room = Room("You are in the Dining Room, the table seems to be set for six. Maybe room for one more?\nThere is a door to your North and "
                 "West.", 5, None, None, 1)
     room_list.append(room)
+
     room = Room("You are in the Master Bedroom, the furniture seems to be too fancy.\nThere is a door "
-                "to your East and South.", None, 4, 0, None)
+                "to your North, East and South.", 6, 4, 0, None)
     room_list.append(room)
-    room = Room("You are in the North Hall, it is filled with modern furniture.\nThere is a door to your North, East, "
-                "South, and West.", 6, 5, 1, 3)
+
+    room = Room("You are in the North Hall, it is filled with modern furniture, that has collected dust.\nThere is a door to your North, East, "
+                "South, and West.", 7, 5, 1, 3)
     room_list.append(room)
-    room = Room("You are in the Kitchen, looks like someone is cooking a meal, smells good!\nIf you do not want any "
-                "food, there is a door to your South and West.", None, None, 2, 4)
+
+    room = Room("You are in the Kitchen, looks like someone is cooking a meal, smells good! Not sure who it is for.\n"
+                "There is a door to your South and West.", 8, None, 2, 4)
     room_list.append(room)
-    room = Room("You made it to the Balcony, pretty view!\nYou only have a door to your South.", None, None, 4, None)
+
+    room = Room("You are in the Master Bathroom, looks like whoever was here left in a hurry.\nThere is only a door to your South.", None, None, 3, None)
+    room_list.append(room)
+
+    room = Room("You made it to the Balcony, pretty view! Too high to jump.\nYou only have a door to your South.", None, None, 4, None)
+    room_list.append(room)
+
+    room = Room("You are in the pantry, stocked with rotten food.\nYou only have a door to your South.", None, None, 5, None)
     room_list.append(room)
 
     current_room = 0
     next_room = 0
 
     done = False
+    #Travel rooms
     while not done:
         caught_by_ghost = False
         print("\n" + room_list[current_room].description)
         for f in item_list:
             if f.room_num == current_room:
                 print(f.description)
+        #If no potion check if caught by ghost
         if potion_countdown == 0:
             for f in ghost_list:
                 if f.room_num == current_room:
@@ -69,6 +89,7 @@ def main():
                       " command \"USE Sage\"")
                     caught_by_ghost = True
                     break
+        #Commands
         user_input = input("What is your action? ")
         command_words = user_input.split(" ")
         if command_words[0].upper() == "N" or command_words[0].upper() == "NORTH":
@@ -79,6 +100,7 @@ def main():
             next_room = room_list[current_room].south
         elif command_words[0].upper() == "W" or command_words[0].upper() == "WEST":
             next_room = room_list[current_room].west
+        #Get Command, Pick up Item
         elif command_words[0].upper() == "GET":
             found_item = False
             for f in item_list:
@@ -88,10 +110,12 @@ def main():
                     break
             if found_item == False:
                 print("Error item is not found or does not exist")
+        #Check Inventory
         elif command_words[0].upper() == "INVENTORY":
             for f in item_list:
                 if f.room_num == -1:
                     print(f.name)
+        #Use Command
         elif command_words[0].upper() == "USE":
             found_item = False
             for f in item_list:
@@ -115,27 +139,30 @@ def main():
                     f.room_num = random.randint(ROOM_MIN, ROOM_MAX)
             if found_item == False:
                 print("Item does not exist in inventory")
+        #Quit Game Command
         elif command_words[0].upper() == "Q" or command_words[0].upper() == "QUIT":
             done = True
             print("\nYou left the house\nGame Over")
             continue
+        #Unknown Command
         else:
             print("Unknown Command")
             next_room = None
             continue
-
+        #If no Room
         if next_room is None:
             print("There is no room here!")
+        #Hit from Ghost
         elif next_room != current_room:
             if caught_by_ghost == True:
-                print("The ghost took one of your lives")
+                print("The ghost took one of your lives. Lives remaining:")
                 lives -= 1
                 print(lives)
             if lives == 0:
                 print("Game Over\nThe ghost killed ya!")
                 done = True
                 break
-
+        #Drop potion count if active
             if potion_countdown > 0:
                 potion_countdown -= 1
 
